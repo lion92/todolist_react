@@ -2,18 +2,20 @@
 import { useState } from "react";
 
 type Props = {
-    todos: { id: number; todo: string }[];
+    todos: { id: number; todo: string; check: boolean }[];
     deleteTodo: (id: number) => void;
     updateTodo: (id: number, todo: string) => void;
+    checkTodo: (id: number, checked: boolean) => void;
 };
 
 export default function VisualizeTodos({
                                            todos,
                                            deleteTodo,
-                                           updateTodo
+                                           updateTodo,
+                                           checkTodo
                                        }: Props) {
 
-    const [editingId, setEditingId] = useState<string | null>(null);
+    const [editingId, setEditingId] = useState<number | null>(null);
     const [value, setValue] = useState("");
 
     return (
@@ -49,8 +51,17 @@ export default function VisualizeTodos({
                     ) : (
                         <>
                             <span className="flex-1 text-sm text-gray-700">{t.todo}</span>
+                            <input
+                                type="checkbox"
+                                checked={t.check}
+                                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                onChange={(e) => checkTodo(t.id, e.target.checked)}
+                            />
                             <button
-                                onClick={() => { setEditingId(t.id); setValue(t.todo); }}
+                                onClick={() => {
+                                    setEditingId(t.id);
+                                    setValue(t.todo);
+                                }}
                                 className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1 rounded transition cursor-pointer"
                             >
                                 Éditer

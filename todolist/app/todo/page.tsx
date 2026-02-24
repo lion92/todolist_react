@@ -5,6 +5,7 @@ import VisualizeTodos from "@/app/todo/visualizeTodos";
 type Todo = {
     id: number;
     todo: string;
+    check:boolean
 };
 
 export default function Page() {
@@ -51,6 +52,15 @@ export default function Page() {
         loadTodos();
     };
 
+    const checkTodo = async (id: number, checked: boolean) => {
+        await fetch("/api/todos", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, check: checked })
+        });
+        loadTodos();
+    };
+
     const updateTodo = async (id: string, newTodo: string) => {
         await fetch("/api/todos", {
             method: "PUT",
@@ -91,6 +101,7 @@ export default function Page() {
                     todos={todos}
                     deleteTodo={deleteTodo}
                     updateTodo={updateTodo}
+                    checkTodo={checkTodo}
                 />
             </div>
         </div>

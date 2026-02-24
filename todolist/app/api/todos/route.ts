@@ -24,11 +24,14 @@ export async function DELETE(req: Request) {
 }
 
 export async function PUT(req: Request) {
-    const { id, todo } = await req.json();
+    const { id, todo, check } = await req.json();
 
     await prisma.todo.update({
         where: { id },
-        data: { todo }
+        data: {
+            ...(todo !== undefined && { todo }),
+            ...(check !== undefined && { check }),
+        }
     });
 
     return Response.json({ success: true });
