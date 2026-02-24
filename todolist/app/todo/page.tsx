@@ -12,17 +12,27 @@ export default function Page() {
 
     const [todo, setTodo] = useState("");
     const [todos, setTodos] = useState<Todo[]>([]);
+    const [hello, setHello] = useState("");
 
     const loadTodos = async () => {
         const res = await fetch("/api/todos");
         const data = await res.json();
         setTodos(data);
+
+    };
+
+    const loadHello = async () => {
+        const res = await fetch("/api/hello");
+        const data = await res.json();
+        setHello(data.message);
     };
 
     useEffect(() => {
         fetch("/api/todos")
             .then(res => res.json())
             .then(setTodos);
+
+        fetch("/api/hello").then(res => res.json()).then(data => setHello(data.message));
     }, []);
 
     const addTodo = async () => {
@@ -104,6 +114,7 @@ export default function Page() {
                     checkTodo={checkTodo}
                 />
             </div>
+            <span>{hello}</span>
         </div>
     );
 }
