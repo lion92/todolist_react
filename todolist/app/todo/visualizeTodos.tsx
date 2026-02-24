@@ -1,7 +1,9 @@
 import {JSX} from "react";
 
 type Props = {
-    todos: {id:string, todo:string}[]
+    todos: {id:string, todo:string}[],
+    updateTodo: (id:string, newTodo:string) => void
+    deleteTodo: (id:string) => void
 };
 
 export default function (props: Props): JSX.Element {
@@ -11,7 +13,19 @@ export default function (props: Props): JSX.Element {
       <ul>
           {
               isTodosEmptyorIsNotExist  ? <p>no todos</p> :
-              props.todos.map(element => <li key={element.id}>{element.todo}</li>)}
+              props.todos.map(element =>
+                  <li key={element.id}><span>{element.todo}
+                      <button onClick={() => {
+                          let changeTodo = "";
+                          const newTodo = prompt("Nouveau todo", changeTodo);
+                          if (newTodo) {
+                              props.updateTodo(element.id, newTodo);
+                          }
+                      }}>update</button>
+                      <button onClick={() => props.deleteTodo(element.id)}>delete</button></span>
+
+
+                  </li>)}
       </ul>
 
   );
